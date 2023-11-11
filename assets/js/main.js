@@ -1,25 +1,71 @@
-//  Selecting 1st random images
-var randomNum1 = Math.floor( Math.random() * 6 ) + 1;   
-var randomDiceImage = "dice" + randomNum1 + ".png";     
-var randomImageSource = "./assets/images/" + randomDiceImage;    
-var img1 = document.querySelectorAll("img")[0];
-img1.setAttribute("src", randomImageSource);
+let playerText = document.getElementById('playerText')
+let restartBtn = document.getElementById('restartBtn')
+let boxes = Array.from(document.getElementsByClassName('box'))
 
-//  Selecting 2nd random images
-var randomNum2 = Math.floor( Math.random() * 6 ) + 1;   
-var randomDiceImage = "dice" + randomNum2 + ".png";     
-var randomImageSource = "./assets/images/" + randomDiceImage;    
-var img2 = document.querySelectorAll("img")[1];
-img2.setAttribute("src", randomImageSource);
+let winnerIndicator = getComputedStyle(document.body).getPropertyValue('--winning-blocks')
 
+const O_TEXT = "O"
+const X_TEXT = "X"
+let currentPlayer = X_TEXT
+let spaces = Array(9).fill(null)
 
-// Choosing the Winner!
-if(randomNum1>randomNum2){
-    document.querySelector("h1").innerHTML = "📍 Player 1 win!";
-} 
-else if( randomNum2 > randomNum1){
-    document.querySelector("h1").innerHTML = "Player 2 win! 📍";
-} 
-else{
-    document.querySelector("h1").innerHTML = "Draw!";
+const startGame = () => {
+    boxes.forEach(box => box.addEventListener('click', boxClicked))
 }
+
+function boxClicked(e) {
+    const id = e.target.id
+
+    if(!spaces[id]){
+        spaces[id] = currentPlayer
+        e.target.innerText = currentPlayer
+
+        if(playerHasWon() !==false){
+            playerText.innerHTML = `${currentPlayer} has won!`
+            let winning_blocks = playerHasWon()
+
+            winning_blocks.map( box => boxes[box].style.backgroundColor=winnerIndicator)
+            return
+        }
+
+        currentPlayer = currentPlayer == X_TEXT ? O_TEXT : X_TEXT
+    }
+}
+const winningCombos = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+]
+
+function playerHasWon() {
+    for (const condition of winningCombos) {
+        let [a, b, c] = condition
+
+        if(spaces[a] && (spaces[a] == spaces[b] && spaces[a] == spaces[c])) {
+            return [a,b,c]
+        }
+    }
+    return false
+}
+
+restartBtn.addEventListener('click', restart)
+
+function restart() {
+    spaces.fill(null)
+
+    boxes.forEach( box => {
+        box.innerText = ''
+        box.style.backgroundColor=''
+    })
+
+    playerText.innerHTML = 'Tic Tack '
+
+    currentPlayer = X_TEXT
+}
+
+startGame()
