@@ -1,6 +1,6 @@
 body{
   background-color:#0A0A23;
-  height: 90vh;
+  height: 80vh;
 }
 
 .container{
@@ -36,11 +36,12 @@ img{
 }
 
 .refresh-button {
-      background-color: orange;
+      background-color: #FFA500;
       color: white;
       border: none;
       padding: 10px 20px;
       cursor: pointer;
+      border-radius: 25px;
     }
 
 footer {
