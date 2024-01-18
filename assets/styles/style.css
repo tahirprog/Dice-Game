@@ -35,6 +35,13 @@ img{
     width: 80%;
 }
 
+.refresh-button {
+      background-color: green;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
 
 footer {
     margin-top: 5%;
